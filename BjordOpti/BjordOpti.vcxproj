@@ -146,35 +146,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\client.h" />
-    <ClInclude Include="..\clientmode.h" />
-    <ClInclude Include="..\createmove.h" />
-    <ClInclude Include="..\engine.h" />
-    <ClInclude Include="..\entity.h" />
-    <ClInclude Include="..\entitylist.h" />
-    <ClInclude Include="..\globals.h" />
-    <ClInclude Include="..\misc.h" />
-    <ClInclude Include="..\netvars.h" />
-    <ClInclude Include="..\offsets.h" />
-    <ClInclude Include="..\settings.h" />
-    <ClInclude Include="..\usercmd.h" />
-    <ClInclude Include="..\vector.h" />
-    <ClInclude Include="..\vmt.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\client.cpp" />
-    <ClCompile Include="..\clientmode.cpp" />
-    <ClCompile Include="..\createmove.cpp" />
-    <ClCompile Include="..\dllmain.cpp" />
-    <ClCompile Include="..\engine.cpp" />
-    <ClCompile Include="..\entity.cpp" />
-    <ClCompile Include="..\entitylist.cpp" />
-    <ClCompile Include="..\globals.cpp" />
-    <ClCompile Include="..\misc.cpp" />
-    <ClCompile Include="..\netvars.cpp" />
-    <ClCompile Include="..\offsets.cpp" />
-    <ClCompile Include="..\settings.cpp" />
-    <ClCompile Include="..\vmt.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
