@@ -9,6 +9,7 @@ Offsets::Offsets()
 void Offsets::Init()
 {
 	m_fFlags = netvars.FindOffset("DT_BasePlayer", "m_fFlags");
+	m_vecVelocity = netvars.FindOffset("DT_BasePlayer", "m_vecVelocity[0]");
 	//m_vecViewOffset = netvars.FindOffset("DT_BasePlayer", "m_vecViewOffset[0]");
 	//m_iTeamNum = netvars.FindOffset("DT_BaseEntity", "m_iTeamNum");
 }

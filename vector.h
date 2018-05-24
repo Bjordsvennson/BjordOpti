@@ -18,6 +18,15 @@ public:
 	
 	float* Base(void) { return (float*)this; }
 	float Length(void) { return (float)sqrt((double)(x * x + y * y + z * z)); }
+	float Length2D(void) { return (float)sqrt((double)(x * x + y * y)); }
+
+	void Normalize(void) 
+	{
+		float length = (float)sqrt((double)(x * x + y * y + z * z));
+		x /= length;
+		y /= length;
+		z /= length;
+	}
 	
 	void Zero(void) { x = y = z = 0.f; }
 			    
@@ -32,10 +41,7 @@ public:
 	float& operator[](int i) { return ((float*)this)[i]; }
 };
 
-class QAngle : public Vector
-{
-public:
-};
+typedef Vector QAngle;
 
 typedef float matrix3x4_t[3][4];
 

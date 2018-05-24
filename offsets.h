@@ -11,6 +11,7 @@ public:
 	int m_fFlags;
 	int m_vecViewOffset;
 	int m_iTeamNum;
+	int m_vecVelocity;
 };
 
 extern Offsets offsets;

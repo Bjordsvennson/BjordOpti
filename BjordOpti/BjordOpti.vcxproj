@@ -153,6 +153,7 @@
     <ClInclude Include="..\entity.h" />
     <ClInclude Include="..\entitylist.h" />
     <ClInclude Include="..\globals.h" />
+    <ClInclude Include="..\math.h" />
     <ClInclude Include="..\misc.h" />
     <ClInclude Include="..\netvars.h" />
     <ClInclude Include="..\offsets.h" />

@@ -1,4 +1,5 @@
 
+#include "vector.h"
 #include "entity.h"
 #include "engine.h"
 #include "vmt.h"
@@ -12,6 +13,11 @@ int Entity::entindex(void)
 int Entity::GetFlags(void)
 {
 	return *(int*)(this + offsets.m_fFlags);
+}
+
+Vector Entity::GetVelocity()
+{
+	return *(Vector*)(this + offsets.m_vecVelocity);
 }
 
 bool Entity::IsOnGround(void)
