@@ -31,7 +31,7 @@ void UnHook()
 
 DWORD WINAPI ThreadCharter(LPVOID lpParameter)
 {
-	CreateConsole();
+	//CreateConsole();
 
 	entitylist = (EntityList*)vmt.GetInterfaceVersion("client.dll", "VClientEntityList");
 	engine =	 (Engine*)vmt.GetInterfaceVersion("engine.dll", "VEngineClient");
