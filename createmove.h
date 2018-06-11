@@ -8,5 +8,6 @@ typedef bool(__thiscall* CreateMoveFn)(void* self, float flInputSampleTime, User
 extern CreateMoveFn oCreateMove;
 
 bool __fastcall hkCreateMove(void* self, void*, float flInputSampleTime, UserCmd* cmd);
+void clamp_movement(UserCmd* cmd);
 
 #endif

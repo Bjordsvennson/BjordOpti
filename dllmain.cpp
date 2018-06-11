@@ -11,20 +11,41 @@
 #include "offsets.h"
 #include "settings.h"
 
+void CreateConsole()
+{
+	AllocConsole();
+	freopen("CONOUT$", "w", stdout);
+}
+
+void UnHook()
+{
+	while (true)
+	{
+		if (GetAsyncKeyState(VK_END))
+		{
+			vmt.HookVirtual(clientmode, 21, oCreateMove);
+			FreeConsole();
+		}
+	}
+}
+
 DWORD WINAPI ThreadCharter(LPVOID lpParameter)
 {
+	CreateConsole();
+
 	entitylist = (EntityList*)vmt.GetInterfaceVersion("client.dll", "VClientEntityList");
-	engine = (Engine*)vmt.GetInterfaceVersion("engine.dll", "VEngineClient");
-	client = (Client*)vmt.GetInterfaceVersion("client.dll", "VClient");
+	engine =	 (Engine*)vmt.GetInterfaceVersion("engine.dll", "VEngineClient");
+	client =	 (Client*)vmt.GetInterfaceVersion("client.dll", "VClient");
 	clientmode = **(ClientMode***)((*(DWORD**)client)[10] + 0x5);
-	globals = **(GlobalVars***)((*(DWORD**)(client))[0] + 0x34);
+	globals =	 **(GlobalVars***)((*(DWORD**)client)[0]  + 0x34);
 
 	netvars.Init();
 	offsets.Init();
-
-	settings.m_bAutohop = true;
+	settings.Init();
 
 	oCreateMove = (CreateMoveFn)vmt.HookVirtual(clientmode, 21, hkCreateMove);
+	
+	UnHook();
 
 	FreeLibraryAndExitThread((HMODULE)lpParameter, 0);
 	return 0;

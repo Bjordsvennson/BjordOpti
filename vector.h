@@ -29,6 +29,7 @@ public:
 	}
 	
 	void Zero(void) { x = y = z = 0.f; }
+	bool IsZero(void) { return x == 0.f && y == 0.f && z == 0.f; }
 			    
 	bool operator==(const Vector& other) { return x == other.x && y == other.y && z == other.z; }
 	bool operator!=(const Vector& other) { return x != other.x || y != other.y || z != other.z; }
@@ -39,6 +40,16 @@ public:
 	Vector& operator/(float f) { return Vector(x / f, y / f, z / f); }
 	Vector& operator/(const Vector& other) { return Vector(x / other.x, y / other.y, z / other.z); }
 	float& operator[](int i) { return ((float*)this)[i]; }
+
+	Vector& operator+(Vector& v)
+	{
+		Vector res;
+		res.x = x + v.x;
+		res.y = y + v.y;
+		res.z = z + v.z;
+
+		return res;
+	};
 };
 
 typedef Vector QAngle;

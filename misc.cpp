@@ -1,7 +1,4 @@
-
 #include <stdio.h>
-#include <windows.h> // for getasynckeystate
-#include <cmath>
 
 #include "misc.h"
 #include "usercmd.h"
@@ -14,22 +11,29 @@
 
 #include "offsets.h"
 
+Vector strafe_view(0, 0, 0);
+
 void Misc::CreateMove(UserCmd* cmd)
 {
+	Optimize(cmd);
+
 	if (cmd->buttons & IN_JUMP)
 	{
 		Autohop(cmd);
 		//Autosync(cmd);
 		Autostrafe(cmd);
-		//Optimize(cmd);
+		//AutostrafeBackwards(cmd);
 	}
 }
 
 void Misc::Autohop(UserCmd* cmd)
 {
+	if (!settings.m_bAutohop)
+		return;
+
 	Entity* local = engine->GetLocal();
 
-	if (settings.m_bAutohop && !local->IsOnGround())
+	if (!local->IsOnGround())
 	{
 		cmd->buttons ^= IN_JUMP;
 	}
@@ -37,49 +41,134 @@ void Misc::Autohop(UserCmd* cmd)
 
 void Misc::Autosync(UserCmd* cmd)
 {
-	if (cmd->mousedx > 1 || cmd->mousedx < -1)
+	if (cmd->mousedx < 0.f)
 	{
-		cmd->sidemove = cmd->mousedx < 0.f ? -450.f : 450.f;
-	}	
+		cmd->sidemove = -450.f;
+	}
+	else if (cmd->mousedx > 0.f)
+	{
+		cmd->sidemove = 450.f;
+	}
+}
+
+float Misc::OptimalStrafeDelta(UserCmd* cmd)
+{
+	Entity* local = engine->GetLocal();
+	float speed = local->GetVelocity().Length2D();
+	return (float)RAD2DEG(atan((double)(30.f / speed)));
 }
 
 void Misc::Optimize(UserCmd* cmd)
 {
+	if (!settings.m_bOptimize)
+		return;
 
+	Entity* local = engine->GetLocal();
+
+	if (strafe_view.IsZero())
+	{
+		strafe_view = cmd->viewangles;
+	}
+
+	float perfect_delta = OptimalStrafeDelta(cmd);
+	float input_delta = (float)(cmd->mousedx * -0.044);
+
+	if ((cmd->buttons & IN_JUMP) && !local->IsOnGround())
+	{
+		if (cmd->mousedx < 0.f)
+		{
+			cmd->sidemove = -450.f;
+			input_delta = perfect_delta;
+		}
+		else if (cmd->mousedx > 0.f)
+		{
+			cmd->sidemove = 450.f;
+			input_delta = -perfect_delta;
+		}
+	}
+
+	strafe_view = strafe_view + QAngle((float)(cmd->mousedy * 0.044), input_delta, 0.f);
+
+	//math.clamp(strafe_view.x, -89.f, 89.f);
+
+	engine->SetViewAngles(strafe_view);
+	cmd->viewangles = strafe_view;
 }
 
 void Misc::Autostrafe(UserCmd* cmd)
+{
+	if (!settings.m_bAutostrafe)
+		return;
+
+	Entity* local = engine->GetLocal();
+
+	float perfect_delta = OptimalStrafeDelta(cmd);
+
+	if (local->IsOnGround())
+	{
+		cmd->forwardmove = 450.f;
+	}
+	else
+	{
+		if (cmd->mousedx > 1 || cmd->mousedx < -1)
+		{
+			if (cmd->mousedx < 0.f)
+			{
+				cmd->sidemove = -450.f;
+			}
+			else
+			{
+				cmd->sidemove = 450.f;
+			}
+		}
+		else
+		{
+			cmd->forwardmove = 6100.f / local->GetVelocity().Length2D();
+
+			if (globals->tickcount % 2 == 0)
+			{
+				cmd->sidemove = -450.f;
+			}
+			else
+			{
+				cmd->sidemove = 450.f;
+			}
+		}
+	}
+}
+
+void Misc::AutostrafeBackwards(UserCmd * cmd)
 {
 	Entity* local = engine->GetLocal();
 
 	if (local->IsOnGround())
 	{
-		cmd->forwardmove = 400.f;
+		cmd->forwardmove = -450.f;
 	}
-	else 
+	else
 	{
-		if (cmd->mousedx > 1 || cmd->mousedx < -1) 
+		if (cmd->mousedx > 1 || cmd->mousedx < -1)
 		{
 			if (cmd->mousedx < 0.f)
 			{
-				cmd->sidemove = -400.f;
+				cmd->sidemove = 450.f;
 			}
 			else
 			{
-				cmd->sidemove = 400.f;
+				cmd->sidemove = -450.f;
 			}
 		}
 		else
 		{
-			cmd->forwardmove = 5850.f / local->GetVelocity().Length2D();
+			cmd->forwardmove = -6100.f / local->GetVelocity().Length2D();
 
 			if (globals->tickcount % 2 == 0)
 			{
-				cmd->sidemove = -400.f;
+				cmd->sidemove = 450.f;
 			}
 			else
 			{
-				cmd->sidemove = 400.f;
+				cmd->sidemove = -450.f;
 			}
 		}
 	}

@@ -18,13 +18,13 @@ Entity* Engine::GetLocal()
 void Engine::GetViewAngles(QAngle& va)
 {
 	typedef void(__thiscall* Fn)(void*, QAngle&);
-	return ((Fn)vmt.GetVirtual(this, 18))(this, va);
+	return ((Fn)vmt.GetVirtual(this, 19))(this, va);
 }
 
 void Engine::SetViewAngles(QAngle& va)
 {
 	typedef void(__thiscall* Fn)(void*, QAngle&);
-	return ((Fn)vmt.GetVirtual(this, 19))(this, va);
+	return ((Fn)vmt.GetVirtual(this, 20))(this, va);
 }
 
 bool Engine::IsInGame(void)
